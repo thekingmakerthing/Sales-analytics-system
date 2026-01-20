@@ -59,7 +59,6 @@ T038|2024-12-03|P106|Headphones|9|2949.0|C009|West|fragrances|Calvin Klein|4.37|
 T052|2024-12-17|P101|LaptopPremium|2|57178.0|C003|North|beauty|Essence|2.56|True
 T042|2024-12-02|P102|Mouse|7|994.0|C026|North|beauty|Glamour Beauty|2.86|True
 T053|2024-12-13|P104|MonitorLED|2|16067.0|C019|North|beauty|Chic Cosmetics|4.36|True
-T040|2024-12-07|P107|USB Cable|2|149.0|C022|West|fragrances|Chanel|4.26|True
 T065|2024-12-02|P105|Webcam|1|3366.0|C025|South|beauty|Nail Couture|4.32|True
 T039|2024-12-18|P104|Monitor|3|23488.0|C008|West|beauty|Chic Cosmetics|4.36|True
 T016|2024-12-08|P101|Laptop|1|65673.0|C013|East|beauty|Essence|2.56|True
@@ -69,5 +68,4 @@ T009|2024-12-03|P107|USB Cable|9|250.0|C027|East|fragrances|Chanel|4.26|True
 T056|2024-12-22|P103|KeyboardMechanical|5|2672.0|C011|North|beauty|Velvet Touch|4.64|True
 T047|2024-12-07|P108|External Hard Drive1TB|7|3480.0|C006|West|fragrances|Dior|3.8|True
 T026|2024-12-25|P109|Wireless Mouse|3|1539.0|C030|North|fragrances|Dolce & Gabbana|3.96|True
-T069|2024-12-05|P107|USB Cable|1|257.0|C012|North|fragrances|Chanel|4.26|True
 T067|2024-12-01|P109|Wireless Mouse|2|654.0|C029|South|fragrances|Dolce & Gabbana|3.96|True
