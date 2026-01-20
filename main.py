@@ -1,5 +1,5 @@
 # main.py
-
+from pathlib import Path
 from utils.file_handler import read_sales_data, parse_transactions, validate_and_filter
 from utils.data_processor import (
     calculate_total_revenue,
@@ -25,7 +25,9 @@ def main():
         
         # 1. Read sales data file
         print("\n[1/10] Reading sales data...")
-        raw_lines = read_sales_data('data/sales_data.txt')
+        base_dir = Path(__file__).parent
+        data_file = base_dir / 'data' / 'sales_data.txt'
+        raw_lines = read_sales_data(str(data_file))
         print(f"✓ Successfully read {len(raw_lines)} transactions")
         
         # 2. Parse and clean transactions
@@ -36,13 +38,25 @@ def main():
         # 3. Display filter options
         print("\n[3/10] Filter Options Available:")
         
-        # 4. Ask if user wants to filter
-        filter_choice = input("\nDo you want to filter data? (y/n): ").strip().lower()
         
+        
+        regions = sorted(set(t.get('Region', 'Unknown') for t in transactions))
+        print(f"Regions: {', '.join(regions)}")
+              
+        # Show transaction amount range
+        amounts = [t.get('Quantity', 0) * t.get('UnitPrice', 0) for t in transactions if t.get('Quantity') and t.get('UnitPrice')]
+        if amounts:
+            min_amount = min(amounts)
+            max_amount = max(amounts)
+            print(f"Amount Range: ₹{min_amount:,.2f} - ₹{max_amount:,.2f}")
+        print()
+
         region_filter = None
         min_amount_filter = None
         max_amount_filter = None
-        
+
+        # 4. Ask if user wants to filter
+        filter_choice = input("\nDo you want to filter data? (y/n): ").strip().lower()
         if filter_choice == 'y':
             region_input = input("Enter region to filter (or press Enter to skip): ").strip()
             if region_input:
@@ -101,33 +115,20 @@ def main():
         # 7. Fetch products from API
         print("\n[6/10] Fetching product data from API...")
         api_products = fetch_all_products()
+        print(f"✓ Fetched {len(api_products)} products")
         
-        if not api_products:
-            print("⚠ Warning: No products fetched from API. Enrichment will be skipped.")
-            enriched_txns = valid_txns.copy()  # Use original transactions without enrichment
-            for txn in enriched_txns:
-                txn['API_Category'] = None
-                txn['API_Brand'] = None
-                txn['API_Rating'] = None
-                txn['API_Match'] = False
-        else:
-            print(f"✓ Fetched {len(api_products)} products")
-            
-            # 8. Enrich sales data
-            print("\n[7/10] Enriching sales data...")
-            product_mapping = create_product_mapping(api_products)
-            enriched_txns = enrich_sales_data(valid_txns, product_mapping)
-            
-            enriched_count = sum(1 for txn in enriched_txns if txn.get('API_Match'))
-            success_rate = (enriched_count / len(enriched_txns) * 100) if enriched_txns else 0
-            print(f"✓ Enriched {enriched_count}/{len(enriched_txns)} transactions ({success_rate:.1f}%)")
+        # 8. Enrich sales data
+        print("\n[7/10] Enriching sales data...")
+        product_mapping = create_product_mapping(api_products)
+        enriched_txns = enrich_sales_data(valid_txns, product_mapping)
         
-        # 9. Save enriched data (already done in enrich_sales_data if API succeeded)
+        enriched_count = sum(1 for txn in enriched_txns if txn.get('API_Match'))
+        success_rate = (enriched_count / len(enriched_txns) * 100) if enriched_txns else 0
+        print(f"✓ Enriched {enriched_count}/{len(enriched_txns)} transactions ({success_rate:.1f}%)")
+        
+        # 9. Save enriched data (already done in enrich_sales_data)
         print("\n[8/10] Saving enriched data...")
-        if api_products:
-            print("✓ Saved to: data/enriched_sales_data.txt")
-        else:
-            print("⚠ Skipped: No API data available")
+        print("✓ Saved to: data/enriched_sales_data.txt")
         
         # 10. Generate report
         print("\n[9/10] Generating report...")
